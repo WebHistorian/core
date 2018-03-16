@@ -54,6 +54,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				name: catObj.catU[i].counter,
 				children: []
 			});
+			catName = catObj.catU[i].counter;
+			noSpCat = catName.replace(/\s+/g, '');
+			$('#explore_visits_category').append("<option id='"+noSpCat+"'>"+catName+"</option>");
+			//works: console.log('category: ',catObj.catU[i].counter,' count: ',catObj.catU[i].count);
 		}
 		for (var count in domains) {
 			var domainName = domains[count].domain;
@@ -235,6 +239,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				function showVisits() {
 					habits = 0;
 					change = 1;
+					$("select[name='category']>option:eq(0)").prop('selected', true);
 					var numDomains = utils.countUniqueProperty(data, "domain");
 //					$("#title").html("<h1 id='viz_title'>What websites do you visit most?</h1>");
 //					$("#above_visual").html("<div class='btn-group' data-toggle='buttons'> <label class='btn btn-primary active'> <input type='radio' name=\"options\" id=\"visits\" autocomplete=\"off\" checked> All Visits  </label> <label class=\"btn btn-primary\"> <input type=\"radio\"name=\"options\" id=\"habits\" autocomplete=\"off\"> Daily Habits  </label></div> &nbsp; &nbsp; <input type='text' id='searchBox'><input type='button' id='search' value='website search'/> &nbsp; " + aboveTxt + "<p><br/> <input type='text' id='slider' name='slider_name' value=''/>");
@@ -244,7 +249,27 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				function showHabits() {
 					habits = 1;
 					change = 1;
+					$("select[name='category']>option:eq(0)").prop('selected', true);
 					changeBubble(datasetH);
+				}
+				function showCat(catSelected) {
+					if(habits==1){
+						var datasetCH = {};
+						$.each(datasetH.children, function(i){
+						    if (this.name == catSelected) {
+								datasetCH = {name: "Domains", children:[{name: catSelected, children: this.children}]};
+							}
+						});
+						changeBubble(datasetCH);
+					} else {
+						var datasetCV = {};
+						$.each(datasetV.children, function(i){
+						    if (this.name == catSelected) {
+								datasetCV = {name: "Domains", children:[{name: catSelected, children: this.children}]};
+							}
+						});
+						changeBubble(datasetCV);
+					}	
 				}
 
 				function listenView() {
@@ -257,6 +282,11 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 						} else if (selectedId === "visits") {
 							showVisits();
 						}
+					});
+					$("select[name='category']").on("change", function() {
+						var selectCat = $("select[name='category'] option:selected");
+						var selectedCat = selectCat.text();
+						showCat(selectedCat);
 					});
 				
 					$(searchSelector).click(function() {
@@ -284,6 +314,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				}
 			
 				window.setTimeout(function() {
+					$(".progress").hide();
 					if (startVisitDisplay) {
 						$(typeSelector + " option[id='visits']").prop("selected", "selected");
 						showVisits();
