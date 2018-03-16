@@ -33,7 +33,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
         }
     }
 
-    visualization.display = function(selector, pagesSelector, domainsSelector, toolbarSelector, canDelete) {
+    visualization.display = function(selector, pagesSelector, domainsSelector, toolbarSelector, canDelete, domName) {
         var change = 0;
         
         var dataSet = [];
@@ -43,16 +43,24 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 		$("#loading_modal").modal("show");
 
 		database.fetchRecords(null, null, function(records) {
-			for (var i = 0; i < records.length; i++) {
+			var recordsRev = utils.sortByPropRev(records, 'visitTime');
+			if (domName==null) {
+				recordsFilter = recordsRev;
+				$("#panel_title").html("Web Historian: Explore Your Data");
+			} else {
+				recordsFilter = utils.onlyIf(recordsRev,'domain',domName,false);
+				$("#panel_title").html("Web Historian: Exploring data from "+domName);
+			}
+			for (var i = 0; i < recordsFilter.length; i++) {
 				dataSet.push({
-					"domain": records[i]['domain'],
-					"date": '<span style="display: none;">' + records[i].visitTime + ' -- ' + moment(records[i].visitTime).format('MMM D, YYYY - h A') + '</span>' + moment(records[i].visitTime).format('llll'),
-					"title": records[i].title,
-					"url": '<a href="'+records[i].url+'" target="_blank">'+records[i].url+'</a>',
-					"rawUrl": records[i].url
+					"domain": recordsFilter[i]['domain'],
+					"date": '<span style="display: none;">' + recordsFilter[i].visitTime + ' -- ' + moment(recordsFilter[i].visitTime).format('MMM D, YYYY - h A') + '</span>' + moment(recordsFilter[i].visitTime).format('llll'),
+					"title": recordsFilter[i].title,
+					"url": '<a href="'+recordsFilter[i].url+'" target="_blank">'+recordsFilter[i].url+'</a>',
+					"rawUrl": recordsFilter[i].url
 				});
 				
-				var domain = records[i]['domain'];
+				var domain = recordsFilter[i]['domain'];
 				
 				if (domainCounts[domain] == undefined) {
 					domainCounts[domain] = 0;
