@@ -53,7 +53,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 			}
 			for (var i = 0; i < recordsFilter.length; i++) {
 				dataSet.push({
-					"domain": recordsFilter[i]['domain'],
+					"domain": recordsFilter[i]['domain'], 
 					"date": '<span style="display: none;">' + recordsFilter[i].visitTime + ' -- ' + moment(recordsFilter[i].visitTime).format('MMM D, YYYY - h A') + '</span>' + moment(recordsFilter[i].visitTime).format('llll'),
 					"title": recordsFilter[i].title,
 					"url": '<a href="'+recordsFilter[i].url+'" target="_blank">'+recordsFilter[i].url+'</a>',
