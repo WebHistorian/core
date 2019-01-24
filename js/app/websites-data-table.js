@@ -218,10 +218,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 							} else {
 								var domainCount = selected.length;
 								
-								$("#confirm_modal_title").html("Remove domains?");
-								$("#confirm_modal_body").html("Would you like to remove the selected domains from Web Historian?");
-								$("#confirm_modal_cancel").html("No");
-								$("#confirm_modal_confirm").html("Yes");
+								$("#confirm_modal_title").html(chrome.i18n.getMessage("wdtConfirmModalTitle2"));
+								$("#confirm_modal_body").html(chrome.i18n.getMessage("wdtConfirmModalBody2"));
+								$("#confirm_modal_cancel").html(chrome.i18n.getMessage("wdtConfirmModalCancel"));
+								$("#confirm_modal_confirm").html(chrome.i18n.getMessage("wdtConfirmModalConfirm"));
 							
 								$("#confirm_modal_confirm").off("click");
 							
