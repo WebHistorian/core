@@ -1,13 +1,26 @@
 define(["moment", "app/config", "core/utils", "jquery"], function(moment, config, utils) {
     var database = {};
 
-    var DATABASE_VERSION = 1;
+    function isInternetExplorer() {
+        return false || !!document.documentMode;
+    }
+
+    var DATABASE_VERSION = isInternetExplorer() ? 2 : 1;
     
     database.db = null;
     
     var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
 
-    var openRequest = indexedDB.open("history.db", DATABASE_VERSION);
+    var openRequest;
+
+    if (isInternetExplorer()) {
+        if (window.localStorage.getItem('web_historian_db_version') === undefined) {
+            openRequest = indexedDB.open("history.db", 1);
+        }
+        openRequest = indexedDB.open("history.db", DATABASE_VERSION);
+    } else {
+        openRequest = indexedDB.open("history.db", DATABASE_VERSION);
+    }
 
     openRequest.onupgradeneeded = function(event) { 
         var db = event.target.result;
@@ -141,6 +154,12 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
 
         window.localStorage.setItem('web_historian_db_version', DATABASE_VERSION);
     }
+
+    if (isInternetExplorer()) {
+        openRequest.onerror = function (e) {
+            indexedDB.deleteDatabase("history.db");
+        };
+    }
     
     openRequest.onsuccess = function(e) {
         database.db = e.target.result;
@@ -150,7 +169,8 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
             console.dir(event.target);
         };
         
-        if (database.onSyncStart != undefined) {
+        if ((isInternetExplorer() && database.Start != undefined) ||
+            (!isInternetExplorer() && database.onSyncStart != undefined)) {
             database.onSyncStart();
         }
         
