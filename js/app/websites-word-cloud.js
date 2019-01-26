@@ -94,9 +94,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				if (menu == null) {
 					menu = [
 						{
-							title: 'Permanently Delete',
+							title: chrome.i18n.getMessage("wwcMenu1Title"),
 							action: function(d) {
-								if (confirm('Do you want to PERMANENTLY remove all URLs with the search term \"'+d.__data__.text+'\" from your local browser history?')) {
+								if (confirm(chrome.i18n.getMessage("wwcConfirm1") + d.__data__.text + chrome.i18n.getMessage("wwcConfirm2"))) {
 									//filter the dataset to just the search word specified
 									var all = utils.sortByProperty(history.fullData,"url");
 									var newHist = [];
@@ -119,7 +119,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 										}
 									});
 									if (removal === null){
-										alert("No URLs were removed. ");
+										alert(chrome.i18n.getMessage("wwcAlert"));
 									} else {
 										$(".wh-tooltip").remove();
 										utils.removeHistory(removal);
@@ -160,9 +160,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 						})
 						.on("mouseover", function(d) {
 							if (menu.length > 0) {
-								tooltip.text("Search terms including \"" + d.text + "\": " + d.allTerms);
+								tooltip.text(chrome.i18n.getMessage("wwcSearchTermsInc") + d.text + "\": " + d.allTerms);
 							} else {
-								tooltip.text("Search terms including \"" + d.text + "\": " + d.allTerms + "");
+								tooltip.text(chrome.i18n.getMessage("wwcSearchTermsInc") + d.text + "\": " + d.allTerms + "");
 							}
 							
 							tooltip.style("visibility", "visible");

@@ -26,17 +26,17 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
         var daySpan = endDay - startDay;
         var fullWeeks = Math.floor(daySpan/7);
 
-        $("#weekMenu").append("<li role='presentation'><a id='allData' role='menuitem' href='#'>All "+fullWeeks+" Weeks</a></li><li role='presentation' class='divider'></li>");
+        $("#weekMenu").append("<li role='presentation'><a id='allData' role='menuitem' href='#'>" + chrome.i18n.getMessage("timeAllData1") + fullWeeks + chrome.i18n.getMessage("timeAllData2") + "</a></li><li role='presentation' class='divider'></li>");
 
         $("#allData").click(function() {
             if(weekSelectedId !== "all") {
                 weekSelectedId = "all";
                 visualization.display(history, history.fullData);
-                $("#title h2").text("Browsing by hour of the day &amp; day of the week, " + moment(start).format('ddd, MMM D') + " - "+ moment(end).format('ddd, MMM D'));
+                $("#title h2").text(chrome.i18n.getMessage("timeAllDataTitle") + moment(start).format('ddd, MMM D') + " - "+ moment(end).format('ddd, MMM D'));
             }
         });
 
-        $("#weekMenu").append("<li role='presentation'><a id='thisWeek' role='menuitem' href='#'>This Week - Default</a></li>");
+        $("#weekMenu").append("<li role='presentation'><a id='thisWeek' role='menuitem' href='#'>" + chrome.i18n.getMessage("timeThisWeek") + "</a></li>");
 
         $("#thisWeek").click(function() {
             if(weekSelectedId !== "0") {
@@ -75,7 +75,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
                     weekSelectedId = weekId;
 //                  var weekData = utils.filterByDates(history.fullData, d.endWeek, d.startWeek);
 //              visualization.display(history, weekData);
-                    $("#title h2").text("Browsing by hour of the day &amp; day of the week, " + d.endWeekDisplay + " - " + d.startWeekDisplay)
+                $("#title h2").text(chrome.i18n.getMessage("timeWeek") + d.endWeekDisplay + " - " + d.startWeekDisplay)
                 }
             });
         }
@@ -260,28 +260,28 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
                 
             if (menu == null) {
 				menu = [{
-					title: 'View in Data Table',
+					title: chrome.i18n.getMessage("timeMenu1"),
 					action: function(d) {
 						var dv = getIdArr(d);
 						requirejs(["app/data-table"], function(data_table) {
 							data_table.display(history, dv, "");
 							var day = getDay(d);
 							$(".wh-tooltip").remove();
-							$("#viz_title").text("All Visits on " + day + " at " + d.__data__.hour + ":00 (24 hr format)");
-							$("#title h2").text(dv.length + " visits - To return to a visualization please use the Navigation above.");
+							$("#viz_title").text(chrome.i18n.getMessage("timeMenu1VizTitle1") + day + chrome.i18n.getMessage("timeMenu1VizTitle2") + d.__data__.hour + chrome.i18n.getMessage("timeMenu1VizTitle3"));
+                            $("#title h2").text(dv.length + chrome.i18n.getMessage("timeMenu1Title"));
 							vizSelected = "data_table";
 							document.body.scrollTop = document.documentElement.scrollTop = 0;
 						});
 					},
 				}, {
-					title: 'View in Web Visits',
+					title: chrome.i18n.getMessage("timeMenu2"),
 					action: function(d){
 						var data = getIdArr(d);
 						requirejs(["app/websites-visited"], function(wv) {
 							var day = getDay(d);
 							$(".wh-tooltip").remove();
-							$("#viz_title").text("All Visits on " + day + " at " + d.__data__.hour + ":00 (24 hr format)");
-							$("#title h2").text(data.length + " visits - To return to a visualization please use the Navigation above.");
+							$("#viz_title").text(chrome.i18n.getMessage("timeMenu2VizTitle1") + day + chrome.i18n.getMessage("timeMenu2VizTitle2") + d.__data__.hour + chrome.i18n.getMessage("timeMenu2VizTitle3"));
+                            $("#title h2").text(data.length + chrome.i18n.getMessage("timeMenu2Title"));
 							vizSelected = "web_visit";
 							wv.display(history, data, 1);
 							document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -324,9 +324,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
                 .attr("height", gridSize)
                 .on("mouseover", function(d){
 					if (menu.length > 0) {
-						tooltip.text("Visits: " + d.value + " on " + d["formattedDate"] +" -- Right-click to see what these visits are.");
+						tooltip.text(chrome.i18n.getMessage("wtTooltip1") + d.value + chrome.i18n.getMessage("wtTooltip2") + d["formattedDate"] + chrome.i18n.getMessage("wtTooltip3"));
 					} else {
-						tooltip.text("Visits: " + d.value + " on " + d["formattedDate"] +".");
+						tooltip.text(chrome.i18n.getMessage("wtTooltip1") + d.value + chrome.i18n.getMessage("wtTooltip2") + d["formattedDate"] +".");
 					}
 					
                     tooltip.style("visibility", "visible");

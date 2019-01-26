@@ -372,7 +372,7 @@ define(function() {
 
   utils.searchTermsToWords = function(uniqueTerms) {
     // stop words - From Jonathan Feinberg's cue.language
-    var stopWords = /^(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall|http|https|com)$/;
+    var stopWords = new RegExp(chrome.i18n.getMessage("utilsStopwordsRx"));
     var allSearchWords = [];
 
     for (i = 0; i < uniqueTerms.length; i++) {
@@ -395,34 +395,6 @@ define(function() {
       }
     }
     return allSearchWords;
-  };
-
-
-  utils.lowHighNum = function(objArr, prop, low) {
-    //for object properties in arrays that contain numbers, get the lowest number if low === true, highest if not
-    //returns the index of the object
-    var index = 0;
-    if (low) {
-      var first = Infinity;
-      for (var i = 0; i < objArr.length; i++) {
-        eval = objArr[i][prop];
-        if (eval < first) {
-          first = eval;
-          index = i;
-        }
-      }
-      return index;
-    } else {
-      var last = 0;
-      for (var i = 0; i < objArr.length; i++) {
-        eval = objArr[i][prop];
-        if (eval > last) {
-          last = eval;
-          index = i;
-        }
-      }
-      return index;
-    }
   };
 
 

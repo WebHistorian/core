@@ -46,10 +46,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 			var recordsRev = utils.sortByPropRev(records, 'visitTime');
 			if (domName==null) {
 				recordsFilter = recordsRev;
-				$("#panel_title").html("Web Historian: Explore Your Data");
+				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitl1"));
 			} else {
-				recordsFilter = utils.onlyIf(recordsRev,'domain',domName,false);
-				$("#panel_title").html("Web Historian: Exploring data from "+domName);
+				recordsFilter = utils.onlyIf(recordsRev, 'domain', domName, false);
+				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitl2") + domName);
 			}
 			for (var i = 0; i < recordsFilter.length; i++) {
 				dataSet.push({
@@ -97,15 +97,15 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 						sortable: false
 					}, {
 						field: 'domain',
-						title: 'Domain',
+						title: chrome.i18n.getMessage('tableDomain'),
 						sortable: true
 					}, {
 						field: 'date',
-						title: 'Date',
+						title: chrome.i18n.getMessage('tableDate'),
 						sortable: true
 					}, {
 						field: 'title',
-						title: 'Title',
+						title: chrome.i18n.getMessage('tableTitle'),
 						sortable: true
 					}, {
 						field: 'url',
@@ -135,10 +135,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 								} else {
 									var urlCount = selected.length;
 								
-									$("#confirm_modal_title").html("Remove URLs?");
-									$("#confirm_modal_body").html("Would you like to remove the selected pages from Web Historian?");
-									$("#confirm_modal_cancel").html("No");
-									$("#confirm_modal_confirm").html("Yes");
+									$("#confirm_modal_title").html(chrome.i18n.getMessage("wdtConfirmModalTitle"));
+									$("#confirm_modal_body").html(chrome.i18n.getMessage("wdtConfirmModalBody"));
+									$("#confirm_modal_cancel").html(chrome.i18n.getMessage("wdtConfirmModalCancel"));
+									$("#confirm_modal_confirm").html(chrome.i18n.getMessage("wdtConfirmModalConfirm"));
 							
 									$("#confirm_modal_confirm").off("click");
 							

@@ -350,7 +350,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				
 					if (menu == null) {
 						menu = [{
-								title: 'View in Data Table',
+								title: chrome.i18n.getMessage("wvMenu1Title"),
 								action: function(d) {
 									//filter the dataset to just the domain of the object
 									var all = history.fullData;
@@ -365,8 +365,8 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 									requirejs(["app/data-table"], function(data_table) {
 										data_table.display(history, dv, "");
 										$(".wh-tooltip").remove();
-										$("#viz_title").text("All Visits to " + d.__data__.className);
-										$("#title h2").append(" To return to a visualization please use the Navigation above.");
+										$("#viz_title").text(chrome.i18n.getMessage("wvMenu1VizTitle") + d.__data__.className);
+										$("#title h2").append(chrome.i18n.getMessage("wvMenu1SubTitle"));
 										vizSelected = "data_table";
 										document.body.scrollTop = document.documentElement.scrollTop = 0;
 									});
@@ -374,7 +374,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 								disabled: false
 							},
 							{
-								title: 'View in Time Heatmap',
+								title: chrome.i18n.getMessage("wvMenu2Title"),
 								action: function(d) {
 									//filter the dataset to just the domain of the object
 									var all = history.fullData;
@@ -389,8 +389,8 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 									requirejs(["app/time"], function(time) {
 										time.display(history, dv);
 										$(".wh-tooltip").remove();
-										$("#viz_title").text("All Visits to " + d.__data__.className);
-										$("#title h2").text("To return to a visualization please use the Navigation above.");
+										$("#viz_title").text(chrome.i18n.getMessage("wvMenu2VizTitle") + d.__data__.className);
+										$("#title h2").text(chrome.i18n.getMessage("wvMenu2SubTitle"));
 										vizSelected = "time";
 										document.body.scrollTop = document.documentElement.scrollTop = 0;
 									});
@@ -398,9 +398,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 								disabled: false
 							},
 							{
-								title: 'Delete',
+								title: chrome.i18n.getMessage("wvMenu3Title"),
 								action: function(d) {
-									if (confirm('Do you want to remove ALL visits to URLs from ' + d.__data__.className + ' from Web Historian?')) {
+									if (confirm(chrome.i18n.getMessage("wvMenu3Confirm1") + d.__data__.className + chrome.i18n.getMessage("wvMenu3Confirm2"))) {
 										$(".wh-tooltip").remove();
 										//filter the dataset to just the domain of the object
 										var all = utils.sortByProperty(history.fullData, "url");
@@ -454,10 +454,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 						})
 						.on("mouseover", function(d) {
 							if (habits === 0) {
-								tooltip.text(d.className + ", Visits: " + format(d.value) + ", Category: " + d.packageName + ". Right-click for more options");
+								tooltip.text(d.className + chrome.i18n.getMessage("wvTooltip1") + format(d.value) + chrome.i18n.getMessage("wvTooltip2") + d.packageName + chrome.i18n.getMessage("wvTooltip3"));
 							} else if (habits === 1) {
 								//var percentDays = Math.round((d.value/diffDays) * 100);
-								tooltip.text(d.className + ", Days Visited: " + format(d.value) + ", Category: " + d.packageName);
+								tooltip.text(d.className + chrome.i18n.getMessage("wvTooltip4") + format(d.value) + chrome.i18n.getMessage("wvTooltip5") + d.packageName);
 							}
 							tooltip.style("visibility", "visible");
 						})

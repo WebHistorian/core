@@ -86,9 +86,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 				if (menu == null) {
 					menu = [
 						{
-							title: 'Permanently Delete',
+							title: chrome.i18n.getMessage("wnMenu1Title"),
 							action: function(d) {
-								if (confirm('Do you want to PERMANENTLY remove ALL visits to URLs from ' + d.__data__.name + ' from your local browser history?')) {
+								if (confirm(chrome.i18n.getMessage("wnMenu1Confirm1") + d.__data__.name + chrome.i18n.getMessage("wnMenu1Confirm2"))) {
 									$(".wh-tooltip").remove();
 
 									//filter the dataset to just the domain of the object
@@ -324,9 +324,9 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 					.on("dblclick", dblclick)
 					.on("mouseover", function(d){
 						if (menu.length > 0) {
-							tooltip.text(d.name + " Category: " + d.category);
+							tooltip.text(d.name + chrome.i18n.getMessage("wnTooltip1") + d.category);
 						} else {
-							tooltip.text(d.name + " Category: " + d.category + ".");
+							tooltip.text(d.name + chrome.i18n.getMessage("wnTooltip1") + d.category + ".");
 						}
 						
 						tooltip.style("visibility", "visible");
