@@ -224,20 +224,8 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
         
         countRequest.onsuccess = function() {
             if (countRequest.result == 0) {
-                $.get(config.categoriesUrl, function(data) {
-                    var categories = database.db.transaction(['categories'], "readwrite").objectStore('categories');
-        
-                    var children = data["children"];
-            
-                    for (var i = 0; i < children.length; i++) {
-                        categories.put(children[i]);
-                    }
-                }).fail(function() {
-					$.get('core/js/app/categories.json', function(data) {
+                $.get('core/js/app/categories.json', function(data) {
 						var children = data["children"];
-
-					    console.log('BACKUP GOT');
-					    console.log(data);
 					    
 						var categories = database.db.transaction(['categories'], "readwrite").objectStore('categories');
 			
@@ -245,10 +233,10 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
 							categories.put(children[i]);
 						}
 					}, 'json');
-				});
+				}
             }
         }
-    }
+    
 
     database.waitForDatabase = function(callback) {
         if (database.db == null) {
