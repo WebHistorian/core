@@ -619,7 +619,6 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
                         if (cursor && bundles.length < 50) {
                             var visit = {
                                 "domain": cursor.value['domain'],
-                                "protocol": cursor.value['protocol'],
                                 "title": cursor.value['title'],
                                 "url": cursor.value['url'],
                                 "refVisitId": cursor.value['referringVisitId'],
@@ -627,6 +626,7 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
                                 "transType": cursor.value['transition'],
                                 "date": cursor.value['visitTime'],
                                 "id": cursor.value['id'],
+                                "visitId": cursor.value['visitId'],
                                 "domain": cursor.value['domain']
                             };
                             
