@@ -155,7 +155,7 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 										}
 									
 										database.clearUrls(toDelete, function() {
-											database.logEvent("urls_deleted", { 'count': urlCount });
+											database.logEvent("urls_deleted_table", { 'count': urlCount });
 
 											$("#confirm_modal").modal("hide");
 
