@@ -26,14 +26,17 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 });
 
 function install_notice() {
-	if (localStorage.getItem('install_time')) {
-		return;
-	}
-
-	var now = new Date().getTime();
-	localStorage.setItem('install_time', now);
-	chrome.tabs.create({url: "index.html"});
-	console.log("installation");
+	chrome.storage.local.get(
+		{'install_time': null},
+		function (result) {
+			if (!result) {
+				var now = new Date().getTime();
+				chrome.storage.local.set({'install_time': now});
+				chrome.tabs.create({url: "index.html"});
+				console.log("installation");
+			}
+		}
+	);
 }
 
 install_notice();
@@ -53,7 +56,13 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     if (result.lastPdkUpload != undefined)
       lastUpload = Number(result.lastPdkUpload);
 
-    var svyEndData = localStorage.getItem('svyEnd');
+    var svyEndData;
+	chrome.storage.local.get(
+		{'svyEnd': null},
+		function (result) {
+			svyEndData = result['svyEnd'];
+		}
+	);
     var svyEndObj = JSON.parse(svyEndData);
     var svyEnd = null;
     if (svyEndObj !== null) {

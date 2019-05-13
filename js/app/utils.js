@@ -305,17 +305,22 @@ define(function() {
       var existing = utils.getStoredData("removals");
       if (existing != null) {
           existing.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
-          localStorage.setItem("removals", JSON.stringify(existing));
+          chrome.storage.local.set({"removals": JSON.stringify(existing)});
       }
       else {
           var first = [];
           first.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
-          localStorage.setItem("removals", JSON.stringify(first));
+          chrome.storage.local.set({"removals": JSON.stringify(first)});
       }
   }
 
   utils.getStoredData = function(key) {
-    return JSON.parse(localStorage.getItem(key));
+    chrome.storage.local.get(
+		{key: null},
+		function (result) {
+			return JSON.parse(result[key]);
+		}
+	);
   };
 
   utils.storeRemovalData = function(data) {
@@ -328,7 +333,7 @@ define(function() {
         numUrls: data.numUrls,
         numVisits: data.numVisits
       });
-      localStorage.setItem("removals", JSON.stringify(existing));
+      chrome.storage.local.set({"removals": JSON.stringify(existing)});
     } else {
       var first = [];
       first.push({
@@ -336,7 +341,7 @@ define(function() {
         numUrls: data.numUrls,
         numVisits: data.numVisits
       });
-      localStorage.setItem("removals", JSON.stringify(first));
+      chrome.storage.local.set({"removals": JSON.stringify(first)});
     }
   };
 
