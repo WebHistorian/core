@@ -25,11 +25,13 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
     openRequest.onupgradeneeded = function(event) { 
         var db = event.target.result;
         
-        var lastVersion = window.localStorage.getItem('web_historian_db_version');
-        
-        if (lastVersion == null) {
-            lastVersion = 0;
-        }
+		var lastVersion;
+        chrome.storage.local.get(
+			{'web_historian_db_version': 0},
+			function (result) {
+				lastVersion = result['web_historian_db_version'];
+			}
+		);
         
         switch (lastVersion) {
             case 0:
@@ -152,7 +154,7 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
                 });
         }        
 
-        window.localStorage.setItem('web_historian_db_version', DATABASE_VERSION);
+        chrome.storage.local.set({'web_historian_db_version': DATABASE_VERSION});
     }
 
     if (isInternetExplorer()) {
