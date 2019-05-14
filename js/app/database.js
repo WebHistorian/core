@@ -14,10 +14,10 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
     var openRequest;
 
     if (isInternetExplorer()) {
-        if (window.localStorage.getItem('web_historian_db_version') === undefined) {
-            openRequest = indexedDB.open("history.db", 1);
-        }
-        openRequest = indexedDB.open("history.db", DATABASE_VERSION);
+		if (!openRequest) {
+			openRequest = indexedDB.open("history.db", 1);
+		}
+		openRequest = indexedDB.open("history.db", DATABASE_VERSION);
     } else {
         openRequest = indexedDB.open("history.db", DATABASE_VERSION);
     }
@@ -25,136 +25,123 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
     openRequest.onupgradeneeded = function(event) { 
         var db = event.target.result;
         
-		var lastVersion;
-        chrome.storage.local.get(
-			{'web_historian_db_version': 0},
-			function (result) {
-				lastVersion = result['web_historian_db_version'];
-			}
-		);
-        
-        switch (lastVersion) {
-            case 0:
-                var urlObjectStore = db.createObjectStore("urls", { 
-                    keyPath: "id", 
-                    autoIncrement:true 
-                });  
-            
-                urlObjectStore.createIndex("id", "id", { 
-                    unique: true 
-                });
+		var urlObjectStore = db.createObjectStore("urls", { 
+			keyPath: "id", 
+			autoIncrement:true 
+		});  
+	
+		urlObjectStore.createIndex("id", "id", { 
+			unique: true 
+		});
 
-                urlObjectStore.createIndex("lastVisitTime", "lastVisitTime", { 
-                    unique: false 
-                });
+		urlObjectStore.createIndex("lastVisitTime", "lastVisitTime", { 
+			unique: false 
+		});
 
-                urlObjectStore.createIndex("title", "title", { 
-                    unique: false 
-                });
+		urlObjectStore.createIndex("title", "title", { 
+			unique: false 
+		});
 
-                urlObjectStore.createIndex("typedCount", "typedCount", { 
-                    unique: false 
-                });
+		urlObjectStore.createIndex("typedCount", "typedCount", { 
+			unique: false 
+		});
 
-                urlObjectStore.createIndex("visitCount", "visitCount", { 
-                    unique: false 
-                });
-                
+		urlObjectStore.createIndex("visitCount", "visitCount", { 
+			unique: false 
+		});
+		
 
-                var visitObjectStore = db.createObjectStore("visits", { 
-                    keyPath: "visitId", 
-                    autoIncrement:true 
-                });  
-        
-                visitObjectStore.createIndex("visitId", "visitId", { 
-                    unique: true 
-                });
+		var visitObjectStore = db.createObjectStore("visits", { 
+			keyPath: "visitId", 
+			autoIncrement:true 
+		});  
 
-                visitObjectStore.createIndex("id", "id", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("visitId", "visitId", { 
+			unique: true 
+		});
 
-                visitObjectStore.createIndex("title", "title", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("id", "id", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("url", "url", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("title", "title", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("referringVisitId", "referringVisitId", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("url", "url", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("transition", "transition", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("referringVisitId", "referringVisitId", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("visitTime", "visitTime", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("transition", "transition", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("protocol", "protocol", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("visitTime", "visitTime", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("domain", "domain", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("protocol", "protocol", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("searchTerms", "searchTerms", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("domain", "domain", { 
+			unique: false 
+		});
 
-                visitObjectStore.createIndex("transmitted", "transmitted", { 
-                    unique: false 
-                });
+		visitObjectStore.createIndex("searchTerms", "searchTerms", { 
+			unique: false 
+		});
+
+		visitObjectStore.createIndex("transmitted", "transmitted", { 
+			unique: false 
+		});
 
 
-                var categoryObjectStore = db.createObjectStore("categories", { 
-                    autoIncrement:true 
-                });  
-        
-                categoryObjectStore.createIndex("search", "search", { 
-                    unique: false 
-                });
+		var categoryObjectStore = db.createObjectStore("categories", { 
+			autoIncrement:true 
+		});  
 
-                categoryObjectStore.createIndex("category", "category", { 
-                    unique: false 
-                });
+		categoryObjectStore.createIndex("search", "search", { 
+			unique: false 
+		});
 
-                categoryObjectStore.createIndex("value", "value", { 
-                    unique: false 
-                });
+		categoryObjectStore.createIndex("category", "category", { 
+			unique: false 
+		});
+
+		categoryObjectStore.createIndex("value", "value", { 
+			unique: false 
+		});
 
 
-                var eventObjectStore = db.createObjectStore("events", { 
-                    keyPath: "id", 
-                    autoIncrement:true 
-                });  
-            
-                eventObjectStore.createIndex("id", "id", { 
-                    unique: true 
-                });
-        
-                eventObjectStore.createIndex("event", "event", { 
-                    unique: false 
-                });
+		var eventObjectStore = db.createObjectStore("events", { 
+			keyPath: "id", 
+			autoIncrement:true 
+		});  
+	
+		eventObjectStore.createIndex("id", "id", { 
+			unique: true 
+		});
 
-                eventObjectStore.createIndex("details", "details", { 
-                    unique: false 
-                });
+		eventObjectStore.createIndex("event", "event", { 
+			unique: false 
+		});
 
-                eventObjectStore.createIndex("date", "date", { 
-                    unique: false 
-                });
+		eventObjectStore.createIndex("details", "details", { 
+			unique: false 
+		});
 
-                eventObjectStore.createIndex("transmitted", "transmitted", { 
-                    unique: false 
-                });
-        }        
+		eventObjectStore.createIndex("date", "date", { 
+			unique: false 
+		});
 
-        chrome.storage.local.set({'web_historian_db_version': DATABASE_VERSION});
+		eventObjectStore.createIndex("transmitted", "transmitted", { 
+			unique: false 
+		});
     }
 
     if (isInternetExplorer()) {
