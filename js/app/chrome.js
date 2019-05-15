@@ -29,7 +29,7 @@ function install_notice() {
 	chrome.storage.local.get(
 		{'install_time': null},
 		function (result) {
-			if (!result) {
+			if (!result['install_time']) {
 				var now = new Date().getTime();
 				chrome.storage.local.set({'install_time': now});
 				chrome.tabs.create({url: "index.html"});
@@ -49,20 +49,15 @@ chrome.alarms.create("check-last-upload", {
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
   chrome.storage.local.get({
-    'lastPdkUpload': 0
+    'lastPdkUpload': 0,
+	'svyEnd': null
   }, function(result) {
     var lastUpload = 0;
 
     if (result.lastPdkUpload != undefined)
       lastUpload = Number(result.lastPdkUpload);
 
-    var svyEndData;
-	chrome.storage.local.get(
-		{'svyEnd': null},
-		function (result) {
-			svyEndData = result['svyEnd'];
-		}
-	);
+    var svyEndData = result['svyEnd'];
     var svyEndObj = JSON.parse(svyEndData);
     var svyEnd = null;
     if (svyEndObj !== null) {

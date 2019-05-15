@@ -301,48 +301,46 @@ define(function() {
   
   function storeRemovalData(data) {
       //add one object (data) to chrome local storage removal log, timeRemoved: , numUrls: , numVisits:
-      var removalArray = [];
-      var existing = utils.getStoredData("removals");
-      if (existing != null) {
-          existing.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
-          chrome.storage.local.set({"removals": JSON.stringify(existing)});
-      }
-      else {
-          var first = [];
-          first.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
-          chrome.storage.local.set({"removals": JSON.stringify(first)});
-      }
-  }
-
-  utils.getStoredData = function(key) {
     chrome.storage.local.get(
-		{key: null},
+		{"removals": null},
 		function (result) {
-			return JSON.parse(result[key]);
+			var existing = JSON.parse(result["removals"]);	
+			if (existing != null) {
+			  existing.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
+			  chrome.storage.local.set({"removals": JSON.stringify(existing)});
+			} else {
+			  var first = [];
+			  first.push({timeRemoved: data.timeRemoved, numUrls: data.numUrls, numVisits: data.numVisits});
+			  chrome.storage.local.set({"removals": JSON.stringify(first)});
+			}
 		}
 	);
-  };
+  }
 
   utils.storeRemovalData = function(data) {
     //add one object (data) to chrome local storage removal log, timeRemoved: , numUrls: , numVisits:
-    var removalArray = [];
-    var existing = utils.getStoredData("removals");
-    if (existing != null) {
-      existing.push({
-        timeRemoved: data.timeRemoved,
-        numUrls: data.numUrls,
-        numVisits: data.numVisits
-      });
-      chrome.storage.local.set({"removals": JSON.stringify(existing)});
-    } else {
-      var first = [];
-      first.push({
-        timeRemoved: data.timeRemoved,
-        numUrls: data.numUrls,
-        numVisits: data.numVisits
-      });
-      chrome.storage.local.set({"removals": JSON.stringify(first)});
-    }
+    chrome.storage.local.get(
+		{"removals": null},
+		function (result) {
+			var existing = JSON.parse(result["removals"]);
+			if (existing != null) {
+			  existing.push({
+				timeRemoved: data.timeRemoved,
+				numUrls: data.numUrls,
+				numVisits: data.numVisits
+			  });
+			  chrome.storage.local.set({"removals": JSON.stringify(existing)});
+			} else {
+			  var first = [];
+			  first.push({
+				timeRemoved: data.timeRemoved,
+				numUrls: data.numUrls,
+				numVisits: data.numVisits
+			  });
+			  chrome.storage.local.set({"removals": JSON.stringify(first)});
+			}
+		}
+	);
   };
 
   utils.findIndexByKeyValue = function(toSearch, key, valueToSearch) {
