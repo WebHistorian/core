@@ -100,6 +100,10 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
 			unique: false 
 		});
 
+		visitObjectStore.createIndex("visitOrigin", "visitOrigin", { // The 'visitOrigin' is only available on Safari. For other browsers, this is ignored.
+			unique: false 
+		});
+
 
 		var categoryObjectStore = db.createObjectStore("categories", { 
 			autoIncrement:true 
@@ -615,8 +619,10 @@ define(["moment", "app/config", "core/utils", "jquery"], function(moment, config
                                 "transType": cursor.value['transition'],
                                 "date": cursor.value['visitTime'],
                                 "id": cursor.value['id'],
-                                "visitId": cursor.value['visitId'],
-                                "domain": cursor.value['domain']
+                                "visitId": cursor.value['visitId']
+                            };
+                            if ("visitOrigin" in cursor.value) { // The 'visitOrigin' is only available on Safari. For other browsers, this will not be appended.
+                                visit["visitOrigin"] = cursor.value['visitOrigin'];
                             };
                             
                             bundle.push(visit);
