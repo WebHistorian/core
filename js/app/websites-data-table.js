@@ -46,10 +46,10 @@ define(["core/utils", "app/config", "core/database", "moment", "d3-context-menu"
 			var recordsRev = utils.sortByPropRev(records, 'visitTime');
 			if (domName==null) {
 				recordsFilter = recordsRev;
-				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitl1"));
+				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitle1"));
 			} else {
 				recordsFilter = utils.onlyIf(recordsRev, 'domain', domName, false);
-				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitl2") + domName);
+				$("#panel_title").html(chrome.i18n.getMessage("wdtPanelTitle2") + domName);
 			}
 			for (var i = 0; i < recordsFilter.length; i++) {
 				dataSet.push({

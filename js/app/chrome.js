@@ -2,7 +2,7 @@
 chrome.browserAction.onClicked.addListener(function(tab) {
 	//Look to see if the extension page is open already and if not, open it.
 
-	var optionsUrl = chrome.extension.getURL('index.html');
+	var optionsUrl = chrome.runtime.getURL('index.html');
 
 	chrome.tabs.query({}, function(extensionTabs) {
 		var found = false;
